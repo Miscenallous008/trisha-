@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="theme-color" content="#fff4f1" />
+<title>A Little Birthday Quest for Trishu</title>
+<style>
+  :root{
+    --ink:#51495d; --muted:#8d8296; --rose:#e99eaa; --rose-deep:#d87991;
+    --lav:#c9b8e8; --butter:#f6d995; --mint:#b8d9ca; --cream:#fffaf4;
+    --card:rgba(255,255,255,.78); --line:rgba(127,103,139,.15);
+    --shadow:0 22px 70px rgba(105,82,114,.13);
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{margin:0;min-height:100vh;color:var(--ink);font-family:ui-rounded,"Avenir Next",Avenir,"Segoe UI",sans-serif;
+    background:radial-gradient(ellipse at 15% 15%,#fff 0,transparent 38%),radial-gradient(ellipse at 90% 4%,#f5e9fa 0,transparent 32%),linear-gradient(140deg,#fff7ef 0%,#fceef1 48%,#f1effb 100%);overflow-x:hidden}
+  button,input{font:inherit}
+  button{cursor:pointer}
+  .sky{position:fixed;inset:0;pointer-events:none;overflow:hidden;z-index:0}
+  .sparkle{position:absolute;color:#d7b6c7;opacity:.62;animation:twinkle 3s ease-in-out infinite}
+  @keyframes twinkle{0%,100%{transform:scale(.75);opacity:.25}50%{transform:scale(1.15);opacity:.8}}
+  .petal{position:absolute;top:-30px;width:12px;height:18px;background:rgba(232,164,178,.42);border-radius:100% 0 100% 0;animation:fall linear infinite}
+  @keyframes fall{to{transform:translate3d(80px,110vh,0) rotate(500deg)}}
+  .wrap{position:relative;z-index:1;width:min(100% - 28px,940px);margin:0 auto;padding:28px 0 54px}
+  .topline{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:22px}
+  .brand{display:flex;align-items:center;gap:9px;font-size:13px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:#9b8198}
+  .brand-mark{width:31px;height:31px;display:grid;place-items:center;border-radius:11px;background:#fff;border:1px solid var(--line);box-shadow:0 5px 15px #b996aa20}
+  .tiny-pill{border:1px solid var(--line);background:#ffffff91;padding:8px 12px;border-radius:999px;color:#907e91;font-size:12px;font-weight:700}
+  .screen{display:none;animation:appear .45s ease both}
+  .screen.active{display:block}
+  @keyframes appear{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+  .hero,.panel{background:var(--card);border:1px solid rgba(255,255,255,.9);box-shadow:var(--shadow);backdrop-filter:blur(14px);border-radius:30px}
+  .hero{text-align:center;position:relative;padding:clamp(28px,6vw,60px) clamp(18px,6vw,58px);overflow:hidden}
+  .hero:before,.hero:after{content:"";position:absolute;border-radius:50%;filter:blur(2px);pointer-events:none}
+  .hero:before{width:210px;height:210px;background:#f7d9dc70;left:-90px;top:-100px}
+  .hero:after{width:230px;height:230px;background:#dcd3f36e;right:-100px;bottom:-120px}
+  .hero-inner{position:relative;z-index:1}
+  .eyebrow{font-size:11px;letter-spacing:.2em;text-transform:uppercase;font-weight:900;color:#b1839b}
+  h1{font-family:Georgia,serif;font-size:clamp(42px,8vw,76px);line-height:.98;font-weight:500;letter-spacing:-.045em;margin:18px 0 14px;color:#5e506b}
+  h1 em{font-style:italic;color:#d6849c}
+  .sub{font-size:clamp(14px,2vw,17px);color:#887d8e;line-height:1.7;max-width:560px;margin:0 auto}
+  .hero-art{height:160px;max-width:420px;margin:15px auto 21px;position:relative;display:grid;place-items:center}
+  .moon{width:118px;height:118px;border-radius:50%;background:linear-gradient(145deg,#fff6df,#f5d9b7);box-shadow:0 12px 30px #dbb58e55;position:relative}
+  .moon:after{content:"";position:absolute;width:18px;height:18px;top:31px;left:32px;border-radius:50%;background:#fff8e9}
+  .orbit{position:absolute;width:205px;height:88px;border:1px solid #d9b7ca88;border-radius:50%;transform:rotate(-13deg)}
+  .orbit:before,.orbit:after{content:"✦";position:absolute;color:#d79aaf;font-size:19px}
+  .orbit:before{left:12px;top:1px}.orbit:after{right:8px;bottom:0;color:#b4a0d2}
+  .cloud{position:absolute;width:112px;height:32px;border-radius:99px;background:#fff9f3;bottom:24px;box-shadow:0 8px 20px #c5a5b52a}
+  .cloud:before,.cloud:after{content:"";position:absolute;background:inherit;border-radius:50%;bottom:8px}.cloud:before{width:45px;height:45px;left:16px}.cloud:after{width:56px;height:56px;right:12px}
+  .cta{border:0;border-radius:999px;padding:14px 23px;background:linear-gradient(120deg,#e99ead,#d89abd);color:white;font-weight:800;letter-spacing:.02em;box-shadow:0 10px 22px #d58ca54d;transition:.2s;}
+  .cta:hover{transform:translateY(-2px);box-shadow:0 14px 28px #d58ca555}
+  .quiet-btn{border:1px solid var(--line);background:#fff9;color:#8d7e91;border-radius:999px;padding:11px 17px;font-weight:700}
+  .hero-note{font-size:12px;color:#a091a0;margin-top:13px}
+  .quest-head{display:flex;align-items:end;justify-content:space-between;gap:14px;margin:4px 2px 17px}
+  .quest-head h2,.panel h2{font-family:Georgia,serif;font-weight:500;font-size:clamp(28px,5vw,40px);margin:5px 0;color:#5e506b}
+  .quest-meta{font-size:12px;color:#9b8c9e;font-weight:700;white-space:nowrap}
+  .progress-shell{height:7px;border-radius:99px;background:#eadfe9;overflow:hidden;margin:0 2px 20px}
+  .progress-fill{height:100%;width:0;background:linear-gradient(90deg,#eaa1ad,#c8b5e5);border-radius:99px;transition:width .4s ease}
+  .panel{padding:clamp(20px,4vw,34px)}
+  .game-kicker{font-size:11px;text-transform:uppercase;letter-spacing:.17em;font-weight:900;color:#bb8b9e}
+  .game-title{font-family:Georgia,serif;font-size:clamp(27px,5vw,38px);font-weight:500;margin:8px 0;color:#5d5068}
+  .game-copy{margin:0;color:#8c8190;line-height:1.6;font-size:14px}
+  .game-area{margin:24px 0 8px;min-height:205px;display:grid;place-items:center}
+  .game-footer{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-top:18px;padding-top:16px;border-top:1px solid var(--line)}
+  .status{font-size:13px;font-weight:700;color:#9b8494}
+  .stars-grid{width:min(100%,520px);display:grid;grid-template-columns:repeat(5,1fr);gap:10px}
+  .star-btn{aspect-ratio:1;border:1px solid #f0e4e8;border-radius:18px;background:linear-gradient(145deg,#fff,#fff5f2);font-size:clamp(23px,5vw,32px);color:#e6b75f;box-shadow:0 5px 14px #b18ba51a;transition:.18s}
+  .star-btn:hover{transform:translateY(-3px) rotate(-4deg)}.star-btn.got{background:#fff1ce;border-color:#efd598;transform:scale(.92);opacity:.8}
+  .memory-grid{width:min(100%,430px);display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+  .memory-card{aspect-ratio:1;border:1px solid #eadfeb;border-radius:16px;background:linear-gradient(145deg,#fff,#f8f1fb);font-size:28px;color:#b69bc8;box-shadow:0 5px 14px #b18ba51a;transition:.2s}
+  .memory-card.open,.memory-card.matched{background:#fff1ef;border-color:#e9c0c9}.memory-card.matched{opacity:.58}
+  .bubble-field{width:min(100%,540px);height:240px;position:relative;border:1px dashed #e8d6e4;border-radius:23px;background:linear-gradient(145deg,#fff9f5,#f8f4ff);overflow:hidden}
+  .bubble{position:absolute;width:48px;height:48px;border:1px solid #fff;background:radial-gradient(circle at 30% 25%,#fff 0 10%,#f4cbd7 35%,#d9c8ef 100%);border-radius:50%;box-shadow:inset -5px -7px 10px #ad8ab033,0 6px 12px #b89cbd29;font-size:18px;color:#fff;text-shadow:0 1px 4px #b58ba8}
+  .bubble:active{transform:scale(.8)}
+  .word-box{display:flex;flex-direction:column;align-items:center;gap:13px;width:min(100%,390px)}
+  .scramble{font-family:Georgia,serif;font-size:clamp(26px,6vw,39px);letter-spacing:.28em;color:#b17f9b;background:#fff5f4;border:1px dashed #e9c9d1;border-radius:18px;padding:17px 24px 17px 34px}
+  .answer-row{display:flex;gap:8px;width:100%}.answer-row input{min-width:0;flex:1;border:1px solid #eadce6;background:#fff;border-radius:13px;padding:13px 15px;outline:none;color:var(--ink);text-transform:uppercase}.answer-row input:focus{border-color:#d7a7c1;box-shadow:0 0 0 3px #e8c6d333}
+  .maze-wrap{width:min(100%,350px);display:flex;flex-direction:column;gap:13px;align-items:center}.maze{display:grid;grid-template-columns:repeat(7,1fr);width:100%;aspect-ratio:1;gap:4px}.tile{border-radius:8px;background:#fff5f2;border:1px solid #f0e4e7;display:grid;place-items:center;font-size:clamp(12px,3vw,20px)}.tile.wall{background:#d9cddd;border-color:#d9cddd}.tile.player{background:#fbe1a9}.tile.goal{background:#d9eddf}
+  .pad{display:grid;grid-template-columns:repeat(3,44px);gap:5px}.pad button{height:39px;border:1px solid #e8dce8;border-radius:10px;background:#fff;color:#8e7a95;font-weight:900}.pad .empty{visibility:hidden}
+  .odd-wrap{width:min(100%,500px);display:flex;flex-direction:column;gap:15px}.odd-question{text-align:center;font-family:Georgia,serif;font-size:23px;color:#79627f}.choice-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}.choice{border:1px solid #ebdfe9;border-radius:17px;background:#fff;padding:16px 5px;font-size:clamp(25px,6vw,37px);transition:.2s}.choice:hover{background:#fff4f1;transform:translateY(-2px)}.choice.correct{background:#edf7ef;border-color:#b9ddc6}
+  .constellation{width:min(100%,500px);height:240px;border:1px solid #ede1ef;border-radius:22px;background:radial-gradient(circle at 50% 50%,#f8f1ff,#fffaf7);position:relative;overflow:hidden}.constellation button{position:absolute;width:42px;height:42px;border:1px solid #ead6e7;border-radius:50%;background:#fff;color:#b79ac1;font-weight:900;box-shadow:0 4px 12px #bda6c42a}.constellation button.done{background:#f8e6b8;color:#8d7048}.constellation .line{position:absolute;height:2px;background:#d9a9bf;transform-origin:left center;opacity:.85}
+  .cake-panel{text-align:center;overflow:hidden;position:relative}.cake-panel .game-copy{max-width:520px;margin:0 auto}.cake-stage{position:relative;width:min(100%,450px);height:300px;margin:15px auto 0;display:flex;align-items:end;justify-content:center;padding-bottom:22px}.cake{position:relative;width:230px;height:135px;background:linear-gradient(180deg,#fff1da 0 22%,#efb8c1 22% 100%);border-radius:18px 18px 24px 24px;box-shadow:0 17px 28px #ac82922c;border-bottom:8px solid #e69daa}.cake:before{content:"";position:absolute;left:0;right:0;top:23px;height:23px;background:#fff8ed;border-radius:50%;box-shadow:0 8px 0 #efc4ce}.cake:after{content:"";position:absolute;left:18px;right:18px;bottom:16px;height:5px;border-radius:50%;background:#d98b9b55}
+  .icing-drip{position:absolute;top:32px;left:20px;width:25px;height:26px;border-radius:0 0 15px 15px;background:#fff8ed;box-shadow:43px 2px 0 #fff8ed,86px -1px 0 #fff8ed,129px 2px 0 #fff8ed,172px 0 0 #fff8ed}
+  .cake-topper{position:absolute;top:0;left:50%;transform:translate(-50%,-100%);font-size:16px;color:#d17e98;white-space:nowrap;font-family:Georgia,serif;letter-spacing:.08em}
+  .candle-row{position:absolute;left:50%;top:72px;transform:translate(-50%,-100%);display:flex;gap:18px;z-index:2}
+  .candle{position:relative;width:10px;height:54px;border-radius:4px 4px 2px 2px;background:repeating-linear-gradient(135deg,#fff 0 5px,#dca6c5 5px 9px);box-shadow:0 2px 4px #a9798a33}
+  .flame{position:absolute;left:50%;top:-25px;transform:translateX(-50%);width:14px;height:22px;background:radial-gradient(ellipse at 50% 70%,#fff7b7 0 22%,#ffc76c 45%,#f09b78 75%,transparent 77%);border-radius:50% 50% 45% 45%;filter:drop-shadow(0 0 8px #ffcf83);animation:flicker .7s ease-in-out infinite alternate}
+  @keyframes flicker{from{transform:translateX(-50%) rotate(-5deg) scale(.94)}to{transform:translateX(-50%) rotate(5deg) scale(1.08)}}
+  .flame.out{display:none}.smoke{position:absolute;left:50%;top:-24px;width:8px;height:20px;border-radius:50%;background:linear-gradient(transparent,#c4b8c7aa,transparent);filter:blur(2px);animation:smoke 1.5s ease-out forwards;display:none}@keyframes smoke{to{transform:translate(-8px,-27px) scale(1.8);opacity:0}}
+  .cake-sparkles{position:absolute;inset:15px;color:#d7b2ca;font-size:20px;pointer-events:none}.cake-sparkles span{position:absolute}.cake-sparkles span:nth-child(1){left:12%;top:28%}.cake-sparkles span:nth-child(2){right:13%;top:18%}.cake-sparkles span:nth-child(3){right:18%;bottom:18%}.cake-sparkles span:nth-child(4){left:18%;bottom:12%}
+  .blow-actions{display:flex;justify-content:center;flex-wrap:wrap;gap:10px;margin-top:0}.tiny-hint{font-size:12px;color:#9a8e9d;margin-top:12px;line-height:1.5}
+  .finale{display:none;max-width:600px;margin:25px auto 0;padding:20px;background:#fff9f3;border:1px solid #f0e0e4;border-radius:22px;animation:appear .6s ease both}.finale.show{display:block}.finale h3{font-family:Georgia,serif;font-size:32px;font-weight:500;margin:4px 0 9px;color:#bb7e96}.finale p{color:#877b8d;line-height:1.7;margin:0 0 14px}.music-state{font-size:12px;color:#9c8a9b;margin-top:9px}
+  .footer{text-align:center;color:#ac9daa;font-size:11px;padding:24px 0 0;letter-spacing:.04em}
+  .toast{position:fixed;z-index:10;left:50%;bottom:24px;transform:translate(-50%,20px);background:#65556e;color:#fff;padding:11px 17px;border-radius:999px;font-size:13px;box-shadow:0 8px 25px #59486644;opacity:0;pointer-events:none;transition:.25s}.toast.show{opacity:1;transform:translate(-50%,0)}
+  .confetti{position:fixed;z-index:9;top:-20px;width:9px;height:14px;pointer-events:none;animation:confettiFall 3.3s linear forwards}@keyframes confettiFall{to{transform:translateY(110vh) rotate(740deg);opacity:.2}}
+  @media(max-width:560px){.wrap{width:min(100% - 20px,940px);padding-top:17px}.topline{margin-bottom:15px}.tiny-pill{font-size:10px;padding:7px 10px}.hero{border-radius:24px}.stars-grid{gap:7px}.star-btn{border-radius:13px}.memory-grid{gap:7px}.memory-card{border-radius:12px}.game-area{min-height:190px}.cake-stage{height:270px}.cake{width:210px}.icing-drip{box-shadow:39px 2px 0 #fff8ed,78px -1px 0 #fff8ed,117px 2px 0 #fff8ed,156px 0 0 #fff8ed}.candle-row{gap:15px}.quest-head{align-items:start;flex-direction:column;gap:3px}.game-footer{align-items:flex-start}}
+  @media(prefers-reduced-motion:reduce){*,*:before,*:after{animation-duration:.01ms!important;animation-iteration-count:1!important;scroll-behavior:auto!important;transition-duration:.01ms!important}}
+</style>
+</head>
+<body>
+<div class="sky" id="sky" aria-hidden="true"></div>
+<div class="wrap">
+  <header class="topline">
+    <div class="brand"><span class="brand-mark">✿</span> a little celebration</div>
+    <div class="tiny-pill">MADE WITH ♡ FOR TRISHU</div>
+  </header>
+
+  <main>
+    <section class="screen active" id="welcome">
+      <div class="hero">
+        <div class="hero-inner">
+          <div class="eyebrow">a tiny adventure, a big birthday wish</div>
+          <h1>For you,<br><em>Trishu.</em></h1>
+          <p class="sub">Somewhere between the stars and the sweetest little things, a birthday surprise is waiting. Complete seven tiny quests to unlock it.</p>
+          <div class="hero-art" aria-hidden="true"><div class="orbit"></div><div class="moon"></div><div class="cloud"></div></div>
+          <button class="cta" id="beginBtn">Begin the birthday quest <span aria-hidden="true">→</span></button>
+          <div class="hero-note">7 little games · 1 special wish · about 5 minutes</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="screen" id="quest">
+      <div class="quest-head"><div><div class="eyebrow">the birthday trail</div><h2 id="questHeading">A little starry quest</h2></div><div class="quest-meta" id="questCount">QUEST 1 OF 7</div></div>
+      <div class="progress-shell"><div class="progress-fill" id="progressFill"></div></div>
+      <div class="panel">
+        <div class="game-kicker" id="gameKicker">GAME 01 · WISH COLLECTOR</div>
+        <div class="game-title" id="gameTitle">Catch a little stardust</div>
+        <p class="game-copy" id="gameCopy">Gather eight stars to light up the birthday sky.</p>
+        <div class="game-area" id="gameArea"></div>
+        <div class="game-footer"><div class="status" id="gameStatus">0 / 8 stars collected</div><button class="cta" id="nextBtn" style="display:none">Next little quest →</button></div>
+      </div>
+    </section>
+
+    <section class="screen" id="cakeScreen">
+      <div class="panel cake-panel">
+        <div class="eyebrow">you made it all the way here</div>
+        <h2 style="margin-top:8px">One last little wish…</h2>
+        <p class="game-copy">Close your eyes, make a wish just for you, and blow out all five candles.</p>
+        <div class="cake-stage">
+          <div class="cake-sparkles" aria-hidden="true"><span>✧</span><span>✦</span><span>✧</span><span>·</span></div>
+          <div class="cake">
+            <div class="cake-topper">happy birthday, Trishu</div>
+            <div class="candle-row" id="candleRow">
+              <div class="candle"><span class="flame"></span><span class="smoke"></span></div>
+              <div class="candle"><span class="flame"></span><span class="smoke"></span></div>
+              <div class="candle"><span class="flame"></span><span class="smoke"></span></div>
+              <div class="candle"><span class="flame"></span><span class="smoke"></span></div>
+              <div class="candle"><span class="flame"></span><span class="smoke"></span></div>
+            </div>
+            <div class="icing-drip"></div>
+          </div>
+        </div>
+        <div class="blow-actions" id="blowActions">
+          <button class="cta" id="blowBtn">🌬️ Blow out the candles</button>
+          <button class="quiet-btn" id="micBtn">Use my microphone</button>
+        </div>
+        <div class="tiny-hint" id="blowHint">Tap the button to make a wish. You can also allow microphone access and blow gently near your device.</div>
+        <div class="finale" id="finale">
+          <div class="eyebrow">wish sent into the universe</div>
+          <h3>Happy Birthday, Trishu! ✨</h3>
+          <p>May this next trip around the sun bring you soft mornings, loud laughter, kind people, unexpected adventures, and a thousand little reasons to smile. You deserve all the lovely things.</p>
+          <button class="quiet-btn" id="musicToggle">♫ Pause birthday music</button>
+          <div style="margin-top:10px"><label class="quiet-btn" for="songUpload" style="display:inline-block">Choose your own song ♫</label><input id="songUpload" type="file" accept="audio/*" hidden></div>
+          <div class="music-state" id="musicState">A little original birthday tune is playing just for you. You can choose a song from your device, too.</div>
+          <div style="margin-top:16px"><button class="cta" id="replayBtn">Relive the little adventure ↻</button></div>
+        </div>
+      </div>
+    </section>
+  </main>
+  <div class="footer">a small corner of the internet, made just for Trishu · ✿</div>
+</div>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script>
+(() => {
+  const $ = (id) => document.getElementById(id);
+  const screens = ['welcome','quest','cakeScreen'];
+  const showScreen = (id) => { screens.forEach(s => $(s).classList.toggle('active', s === id)); window.scrollTo({top:0,behavior:'smooth'}); };
+  const toast = (message) => { const el=$('toast'); el.textContent=message; el.classList.add('show'); clearTimeout(toast.timer); toast.timer=setTimeout(()=>el.classList.remove('show'),1900); };
+  const games = [
+    {kicker:'GAME 01 · WISH COLLECTOR',title:'Catch a little stardust',copy:'Gather eight stars to light up the birthday sky.'},
+    {kicker:'GAME 02 · MEMORY GARDEN',title:'Find the matching pairs',copy:'Turn over the cards and find all four matching pairs.'},
+    {kicker:'GAME 03 · BUBBLE PARADE',title:'Pop the happy bubbles',copy:'A little bubble party! Pop eight before they float away.'},
+    {kicker:'GAME 04 · LETTER MAGIC',title:'Unscramble the birthday word',copy:'The letters got a little mixed up. Put them back in the right order.'},
+    {kicker:'GAME 05 · MOONLIT MAZE',title:'Find your way to the moon',copy:'Guide your little star through the garden maze. Use the arrows or WASD.'},
+    {kicker:'GAME 06 · PARTY SPOTTER',title:'Pick the one that does not belong',copy:'Three quick rounds. Trust your instincts!'},
+    {kicker:'GAME 07 · WISH CONSTELLATION',title:'Connect the stars in order',copy:'Tap the numbered stars from 1 to 5 to complete your constellation.'}
+  ];
+  let current=0, done=false, music=null, customAudio=null, customAudioUrl=null, micStream=null, micFrame=null, micAudio=null;
+  const setStatus=(s)=>$('gameStatus').textContent=s;
+  const setProgress=()=>{$('questCount').textContent=`QUEST ${current+1} OF 7`; $('progressFill').style.width=`${(current/7)*100}%`;};
+  const completeGame=()=>{if(done)return;done=true;setStatus('Lovely! Quest complete ✨');$('nextBtn').style.display='inline-flex';$('nextBtn').textContent=current===6?'Reveal the birthday cake →':'Next little quest →';};
+  function startGame(index){current=index;done=false;setProgress();$('gameKicker').textContent=games[index].kicker;$('gameTitle').textContent=games[index].title;$('gameCopy').textContent=games[index].copy;$('nextBtn').style.display='none';renderGame(index);}
+  function renderGame(i){const area=$('gameArea');area.innerHTML='';
+    if(i===0){let count=0;setStatus('0 / 8 stars collected');const grid=document.createElement('div');grid.className='stars-grid';const symbols=['✦','✧','★','✦','✧','★','✦','✧','★','✦'];symbols.forEach((sym,n)=>{const b=document.createElement('button');b.className='star-btn';b.textContent=sym;b.setAttribute('aria-label','Collect star');b.addEventListener('click',()=>{if(b.classList.contains('got'))return;b.classList.add('got');b.textContent='✓';count++;setStatus(`${count} / 8 stars collected`);if(count===8)completeGame();});grid.appendChild(b);});area.appendChild(grid);}
+    if(i===1){let deck=['🌷','🌙','🍓','🦋','🌷','🌙','🍓','🦋'].sort(()=>Math.random()-.5),open=[],matches=0,locked=false,moves=0;setStatus('0 / 4 pairs found · 0 moves');const grid=document.createElement('div');grid.className='memory-grid';deck.forEach((v,n)=>{const b=document.createElement('button');b.className='memory-card';b.textContent='✿';b.addEventListener('click',()=>{if(locked||b.classList.contains('matched')||open.includes(b))return;b.textContent=v;b.classList.add('open');open.push(b);if(open.length===2){moves++;locked=true;setTimeout(()=>{if(open[0].textContent===open[1].textContent){open.forEach(x=>x.classList.add('matched'));matches++;}else open.forEach(x=>{x.textContent='✿';x.classList.remove('open');});open=[];locked=false;setStatus(`${matches} / 4 pairs found · ${moves} moves`);if(matches===4)completeGame();},650);}});grid.appendChild(b);});area.appendChild(grid);}
+    if(i===2){let count=0;setStatus('0 / 8 bubbles popped');const field=document.createElement('div');field.className='bubble-field';const positions=[[8,12],[31,8],[57,18],[79,11],[17,48],[43,42],[68,52],[86,65],[35,75],[60,78]];positions.forEach((p,n)=>{const b=document.createElement('button');b.className='bubble';b.textContent='✧';b.style.left=`${p[0]}%`;b.style.top=`${p[1]}%`;b.style.animation=`twinkle ${1.5+(n%3)*.4}s ease-in-out infinite`;b.addEventListener('click',()=>{if(b.disabled)return;b.disabled=true;b.style.transform='scale(0)';b.style.opacity='0';count++;setStatus(`${count} / 8 bubbles popped`);if(count===8)completeGame();});field.appendChild(b);});area.appendChild(field);}
+    if(i===3){setStatus('A little word puzzle');const box=document.createElement('div');box.className='word-box';box.innerHTML='<div class="scramble">S H I R T U</div><div class="answer-row"><input id="wordAnswer" maxlength="8" autocomplete="off" placeholder="Your answer" aria-label="Unscrambled word"><button class="cta" id="checkWord">Check</button></div><div class="tiny-hint" id="wordHint">Hint: the birthday star of this website ✨</div>';area.appendChild(box);const check=()=>{const val=$('wordAnswer').value.trim().toUpperCase();if(val==='TRISHU'){completeGame();$('wordHint').textContent='That is the one! A word made for today.';}else{ $('wordHint').textContent='Not quite — try rearranging the letters!';$('wordAnswer').focus();}};$('checkWord').addEventListener('click',check);$('wordAnswer').addEventListener('keydown',e=>{if(e.key==='Enter')check();});}
+    if(i===4){const map=['S...#..','##..#.#','...##..','.#.....','.#.###.','...#...','###...G'];let pos=[0,0],steps=0;setStatus('Reach the moon · 0 steps');const wrap=document.createElement('div');wrap.className='maze-wrap';const board=document.createElement('div');board.className='maze';const draw=()=>{board.innerHTML='';map.forEach((row,r)=>[...row].forEach((ch,c)=>{const t=document.createElement('div');t.className='tile'+(ch==='#'?' wall':'')+(r===pos[0]&&c===pos[1]?' player':'')+(ch==='G'?' goal':'');t.textContent=r===pos[0]&&c===pos[1]?'⭐':ch==='G'?'🌙':ch==='#'?'':' ';board.appendChild(t);}));};const move=(dr,dc)=>{if(done)return;const nr=pos[0]+dr,nc=pos[1]+dc;if(nr<0||nc<0||nr>=7||nc>=7||map[nr][nc]==='#')return;pos=[nr,nc];steps++;draw();setStatus(`Reach the moon · ${steps} steps`);if(map[nr][nc]==='G')completeGame();};draw();const pad=document.createElement('div');pad.className='pad';[['',0,0],['↑',-1,0],['',0,0],['←',0,-1],['↓',1,0],['→',0,1]].forEach(([label,dr,dc],idx)=>{const b=document.createElement('button');b.textContent=label||'·';if(!label)b.className='empty';else b.addEventListener('click',()=>move(dr,dc));pad.appendChild(b);});wrap.append(board,pad);area.appendChild(wrap);const keyHandler=e=>{const k=e.key.toLowerCase();const m={arrowup:[-1,0],w:[-1,0],arrowdown:[1,0],s:[1,0],arrowleft:[0,-1],a:[0,-1],arrowright:[0,1],d:[0,1]};if(m[k]){e.preventDefault();move(...m[k]);}};window.addEventListener('keydown',keyHandler,{once:false});window._mazeKey=keyHandler;}
+    if(i===5){let round=0;const qs=[{q:'Which one is not a flower?',a:['🌹','🌻','🌷','🍉'],correct:3},{q:'Which one belongs in the night sky?',a:['🥕','🌙','🍰','🧦'],correct:1},{q:'Which one is not a party treat?',a:['🧁','🍪','🎈','🍩'],correct:2}];const wrap=document.createElement('div');wrap.className='odd-wrap';const q=document.createElement('div');q.className='odd-question';const choices=document.createElement('div');choices.className='choice-grid';const paint=()=>{q.textContent=qs[round].q;choices.innerHTML='';qs[round].a.forEach((v,n)=>{const b=document.createElement('button');b.className='choice';b.textContent=v;b.addEventListener('click',()=>{if(b.dataset.used)return;b.dataset.used='1';if(n===qs[round].correct){b.classList.add('correct');round++;if(round===3){setStatus('3 / 3 rounds complete');completeGame();}else{setStatus(`${round} / 3 rounds complete`);setTimeout(paint,450);}}else{toast('Almost! Have another look ✿');}});choices.appendChild(b);});};setStatus('0 / 3 rounds complete');paint();wrap.append(q,choices);area.appendChild(wrap);}
+    if(i===6){let next=1;const points=[[50,13],[78,34],[67,76],[28,78],[18,34],[43,49],[87,77],[12,67],[51,89]];setStatus('Find star 1');const box=document.createElement('div');box.className='constellation';const lineLayer=document.createElement('div');box.appendChild(lineLayer);let prev=null;points.forEach((p,n)=>{const b=document.createElement('button');b.textContent=String(n+1);b.style.left=`calc(${p[0]}% - 21px)`;b.style.top=`calc(${p[1]}% - 21px)`;b.addEventListener('click',()=>{if(n!==next-1){toast(`Find star ${next} next ✨`);return;}b.classList.add('done');if(prev){const dx=(p[0]-prev[0])*box.clientWidth/100,dy=(p[1]-prev[1])*box.clientHeight/100;const line=document.createElement('div');line.className='line';line.style.left=`${prev[0]}%`;line.style.top=`${prev[1]}%`;line.style.width=`${Math.hypot(dx,dy)}px`;line.style.transform=`rotate(${Math.atan2(dy,dx)}rad)`;lineLayer.appendChild(line);}prev=p;next++;if(next===6)completeGame();else setStatus(`Find star ${next}`);});box.appendChild(b);});area.appendChild(box);}
+  }
+  $('beginBtn').addEventListener('click',()=>{showScreen('quest');startGame(0);});
+  $('nextBtn').addEventListener('click',()=>{if(!done)return;if(current===6){$('progressFill').style.width='100%';showScreen('cakeScreen');}else{if(window._mazeKey){window.removeEventListener('keydown',window._mazeKey);window._mazeKey=null;}startGame(current+1);}});
+  function confetti(){for(let i=0;i<90;i++){const el=document.createElement('i');el.className='confetti';el.style.left=Math.random()*100+'vw';el.style.animationDelay=Math.random()*.9+'s';el.style.background=['#e8a1b2','#c9b8e8','#f4d48f','#b8d9ca','#f3c7b9'][i%5];el.style.borderRadius=Math.random()>.5?'50%':'2px';document.body.appendChild(el);setTimeout(()=>el.remove(),4300);}}
+  function playOriginalTune(){stopMusic();const Ctx=window.AudioContext||window.webkitAudioContext;if(!Ctx){$('musicState').textContent='Your browser does not support the built-in music player.';return;}const ctx=new Ctx();music={ctx,nodes:[],timer:null,paused:false};ctx.resume();const master=ctx.createGain();master.gain.value=.19;master.connect(ctx.destination);music.master=master;
+    const notes=[659.25,587.33,523.25,587.33,659.25,659.25,659.25,587.33,587.33,587.33,659.25,783.99,783.99,659.25,587.33,523.25,587.33,659.25,587.33,523.25,493.88,523.25,587.33,659.25];
+    const beat=.34, start=ctx.currentTime+.12;
+    const chords=[[261.63,329.63,392.00],[220,261.63,329.63],[174.61,220,261.63],[196,246.94,293.66]];
+    function tone(freq,when,duration,type,volume,fade){const o=ctx.createOscillator(),g=ctx.createGain();o.type=type;o.frequency.setValueAtTime(freq,when);g.gain.setValueAtTime(.0001,when);g.gain.exponentialRampToValueAtTime(volume,when+.035);g.gain.exponentialRampToValueAtTime(.0001,when+duration);o.connect(g);g.connect(master);o.start(when);o.stop(when+duration+.03);music.nodes.push(o);}
+    for(let bar=0;bar<4;bar++){const t=start+bar*beat*6;chords[bar].forEach(f=>tone(f,t,beat*5.6,'sine',.035));}
+    notes.forEach((f,i)=>tone(f,start+i*beat*.72,beat*.62,'triangle',.12));
+    // A soft repeating sparkle note gives the tune a little lift without using a prerecorded song.
+    for(let i=0;i<24;i++){const sparkle=[1046.5,0,783.99,0][i%4];if(sparkle)tone(sparkle,start+i*beat*.72+.18,beat*.22,'sine',.025);}
+    const total=Math.max(notes.length*beat*.72+1.1,beat*6*4+0.35);music.timer=setTimeout(()=>{if(music&&!music.paused){playOriginalTune();}},total*1000);
+    $('musicState').textContent='A little original birthday tune is playing just for you.';
+  }
+  function stopMusic(){if(music){clearTimeout(music.timer);try{music.nodes.forEach(n=>n.stop());music.ctx.close();}catch(e){}music=null;}if(customAudio){customAudio.pause();customAudio.currentTime=0;customAudio=null;}if(customAudioUrl){URL.revokeObjectURL(customAudioUrl);customAudioUrl=null;}}
+  function toggleMusic(){if(customAudio){if(customAudio.paused){customAudio.play();$('musicToggle').textContent='♫ Pause birthday music';}else{customAudio.pause();$('musicToggle').textContent='♫ Play birthday music';$('musicState').textContent='Your selected song is paused.';}return;}if(!music||music.paused){playOriginalTune();$('musicToggle').textContent='♫ Pause birthday music';}else{music.paused=true;clearTimeout(music.timer);music.master.gain.setTargetAtTime(.0001,music.ctx.currentTime,.05);$('musicToggle').textContent='♫ Play birthday music';$('musicState').textContent='Music paused. Your birthday moment is still right here.';}}
+  function extinguish(){if($('finale').classList.contains('show'))return;if(micFrame)cancelAnimationFrame(micFrame);if(micStream){micStream.getTracks().forEach(t=>t.stop());micStream=null;}if(micAudio){try{micAudio.close();}catch(e){}micAudio=null;}document.querySelectorAll('.flame').forEach((f)=>f.classList.add('out'));document.querySelectorAll('.smoke').forEach((s)=>{s.style.display='block';});$('blowActions').style.display='none';$('blowHint').textContent='';$('finale').classList.add('show');confetti();playOriginalTune();}
+  $('blowBtn').addEventListener('click',extinguish);
+  $('micBtn').addEventListener('click',async()=>{const hint=$('blowHint');if(!navigator.mediaDevices?.getUserMedia){hint.textContent='Microphone access is not available here. Use the blow-out button instead.';return;}try{micStream=await navigator.mediaDevices.getUserMedia({audio:true});const Ctx=window.AudioContext||window.webkitAudioContext;micAudio=new Ctx();const source=micAudio.createMediaStreamSource(micStream),analyser=micAudio.createAnalyser();analyser.fftSize=512;source.connect(analyser);const data=new Uint8Array(analyser.fftSize);hint.textContent='Microphone is ready — blow gently near your device!';let loudFrames=0;const listen=()=>{analyser.getByteTimeDomainData(data);let sum=0;for(let i=0;i<data.length;i++){const v=(data[i]-128)/128;sum+=v*v;}const rms=Math.sqrt(sum/data.length);if(rms>.19)loudFrames++;else loudFrames=Math.max(0,loudFrames-1);if(loudFrames>7){try{micAudio.close();}catch(e){}extinguish();return;}micFrame=requestAnimationFrame(listen);};listen();}catch(e){hint.textContent='Mic permission was not available. You can still tap “Blow out the candles”.';}});
+  $('musicToggle').addEventListener('click',toggleMusic);
+  $('songUpload').addEventListener('change',()=>{const file=$('songUpload').files?.[0];if(!file)return;stopMusic();customAudioUrl=URL.createObjectURL(file);customAudio=new Audio(customAudioUrl);customAudio.loop=true;customAudio.play().then(()=>{$('musicToggle').textContent='♫ Pause birthday music';$('musicState').textContent=`Now playing: ${file.name} (from your device).`;}).catch(()=>{$('musicState').textContent='The song is selected. Press Play birthday music to start it.';});});
+  $('replayBtn').addEventListener('click',()=>{stopMusic();if(window._mazeKey){window.removeEventListener('keydown',window._mazeKey);window._mazeKey=null;}document.querySelectorAll('.flame').forEach(f=>f.classList.remove('out'));document.querySelectorAll('.smoke').forEach(s=>s.style.display='none');$('finale').classList.remove('show');$('blowActions').style.display='flex';$('blowHint').textContent='Tap the button to make a wish. You can also allow microphone access and blow gently near your device.';showScreen('welcome');$('progressFill').style.width='0%';});
+  // Gentle ambient stars and petals.
+  const sky=$('sky');for(let i=0;i<25;i++){const s=document.createElement('span');s.className='sparkle';s.textContent=i%3===0?'✦':'·';s.style.left=Math.random()*100+'%';s.style.top=Math.random()*100+'%';s.style.fontSize=(10+Math.random()*14)+'px';s.style.animationDelay=(Math.random()*3)+'s';sky.appendChild(s);}for(let i=0;i<10;i++){const p=document.createElement('i');p.className='petal';p.style.left=Math.random()*100+'%';p.style.animationDuration=(12+Math.random()*13)+'s';p.style.animationDelay=(-Math.random()*22)+'s';p.style.opacity=.2+Math.random()*.35;sky.appendChild(p);}
+})();
+</script>
+</body>
+</html>
